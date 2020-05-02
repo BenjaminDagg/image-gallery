@@ -19,13 +19,24 @@ export default class App extends Component {
       filter: FILTERS.RAND,
       search: ""
     }
+    
     this.shuffle = this.shuffle.bind(this);
     this.createGallery = this.createGallery.bind(this);
     this.filterChange = this.filterChange.bind(this);
     this.searchChanged = this.searchChanged.bind(this);
+    this.getImagesAsync  = this.getImagesAsync.bind(this);
+    this.testPromise = this.testPromise.bind(this);
   }
 
   componentDidMount() {
+
+    var promise = this.testPromise()
+    .then((result) => {
+      console.log(result)
+    });
+
+    
+
     //lorem picsum api url
     const url = 'https://picsum.photos/v2/list';
 
@@ -37,6 +48,21 @@ export default class App extends Component {
         photos = this.shuffle(photos);
         this.setState({photos: photos});
     })
+  }
+
+
+  async getImagesAsync() {
+    var response  = await fetch(`https://picsum.photos/v2/list`);
+    var images =  await response.json();
+    
+    return images
+  }
+
+  async testPromise() {
+    var result = await setTimeout(function() {
+      return "hello"
+    },3000)
+    return result;
   }
 
 
